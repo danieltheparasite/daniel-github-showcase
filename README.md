@@ -1,7 +1,7 @@
 # Daniel Inc. — low-poly 3D GitHub desk
 
-A three.js desk scene: a closed ASUS ROG Zephyrus laptop, an RGB mouse (Kreo Hawk), Tangzu Waner Red Lion IEMs, a toy car (drag it), a wall pipe lamp covered in sticky notes, and one book per GitHub repository.
-Drag to orbit. Click the laptop and two hands open it. Click a book to open it (description inside). If the repo has a deployed website (the "Website" field on GitHub), a sticky note with the link sits on the page: click it and the hands type the address into the laptop and the site loads on its screen. The big red button changes the theme. Esc goes back.
+A three.js desk scene: a closed ASUS ROG Zephyrus laptop, an RGB mouse (Kreo Hawk), a toy car (drag it), a wall pipe lamp covered in sticky notes, and one book per GitHub repository.
+Drag to orbit. Click the laptop and two hands open it. Click a book to open it (description inside). If the repo has a deployed website (the "Website" field on GitHub), a sticky note with the link sits on the page: click it and the hands type the address into the laptop and the site loads on its screen. The big red button changes the theme. Click the wall lamp to dim the lights, again to switch them off, again to turn them back on. Esc goes back.
 Everything loads live from the GitHub API, so new repositories appear when you refresh.
 
 ## Run it (Windows PowerShell)

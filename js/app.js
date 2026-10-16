@@ -58,7 +58,7 @@ scene.add(win);
 const pipe = M(0x2a2b30, { metalness: .7, roughness: .4 }), lamp = new THREE.Group(); scene.add(lamp);
 cy(lamp, .28, .28, .06, 10, pipe, -3.8, 3.2, -1.67).rotation.x = Math.PI / 2; cy(lamp, .07, .07, 1.05, 6, pipe, -3.8, 3.2, -1.17).rotation.x = Math.PI / 2;
 ico(lamp, .11, pipe, -3.8, 3.2, -.65); cy(lamp, .07, .07, .6, 6, pipe, -3.8, 2.9, -.65); cy(lamp, .12, .12, .2, 8, pipe, -3.8, 2.5, -.65);
-ico(lamp, .22, M(0xffe9a0, { emissive: 0xffc861, emissiveIntensity: .6 }), -3.8, 2.25, -.65, null, 1);
+const bulbM = M(0xffe9a0, { emissive: 0xffc861, emissiveIntensity: .6 }); ico(lamp, .22, bulbM, -3.8, 2.25, -.65, null, 1);
 const notes = [], bc = new THREE.Vector3(-3.8, 2.25, -.65);
 for (let i = 0; i < 13; i++) {
   const m = add(new THREE.PlaneGeometry(.3, .3), M(0xffe14d, { side: THREE.DoubleSide }), 0, 0, 0, lamp);
@@ -66,6 +66,8 @@ for (let i = 0; i < 13; i++) {
   else { m.position.set(-3.8, 3.15 - (i - 9) * .22, -.65 + (i % 2 ? .08 : -.08)); m.rotation.y = i % 2 ? 1.2 : -1.2; }
   m.rotateZ(Math.random() * 1.5); notes.push(m);
 }
+
+lamp.userData = { kind: 'lamp', tip: '<b>Lamp</b><br>Click to dim it, then switch it off' };
 
 /* ASUS ROG Zephyrus: closed black lid with erratic strip lights */
 const LZ = .15, lap = grp(0, 0, LZ, { kind: 'laptop', tip: `<b>Daniel's ASUS ROG Zephyrus</b><br>AMD Ryzen AI 9 HX 370 (2.00 GHz)<br>32 GB RAM · 1.86 TB storage<br>NVIDIA RTX 5070 Ti Laptop GPU, 12 GB` });
@@ -87,24 +89,19 @@ const rgbM = new THREE.MeshBasicMaterial({ toneMapped: false }), mo = grp(1.95, 
 bx(mo, .32, .09, .5, 0x16171c, 0, .075, 0, { roughness: .4 }); bx(mo, .33, .025, .52, rgbM, 0, .02, 0); bx(mo, .04, .012, .2, rgbM, 0, .124, .08); cy(mo, .035, .035, .06, 8, rgbM, 0, .128, -.1).rotation.z = Math.PI / 2;
 const mLight = new THREE.PointLight(0xffffff, 1.4, 2, 2); mLight.position.set(1.95, .25, .65); scene.add(mLight);
 
-/* Tangzu Waner Red Lion IEMs */
-const iem = grp(-3.4, 0, -.3, { kind: 'iem', tip: '<b>Tangzu Waner</b><br>Red Lion Edition' }), red = M(0xd4101c, { transparent: true, opacity: .86, emissive: 0x6a0008, emissiveIntensity: .9, roughness: .2 });
-for (const s of [-1, 1]) {
-  const sh = add(new THREE.DodecahedronGeometry(.17, 0), red, s * .2, .13, 0, iem); sh.scale.set(1, .8, .55); sh.rotation.set(.3, s * .4, s * .3);
-  ico(iem, .09, M(0x7a0010, { emissive: 0x300004 }), s * .2, .15, .06).scale.set(1, .8, .4); cy(iem, .045, .04, .12, 6, 0xd9a441, s * .2, .13, -.17, { metalness: .6 }).rotation.x = Math.PI / 2; ico(iem, .06, 0xf1e8d8, s * .2, .13, -.27);
-}
-for (let k = 0; k < 3; k++) add(new THREE.TorusGeometry(.34 + k * .05, .014, 5, 22), M(0x7a3326, { roughness: .6 }), 0, .02 + k * .02, .25, iem).rotation.x = Math.PI / 2;
-cy(iem, .035, .035, .22, 6, 0x15161a, .55, .03, .62).rotation.z = Math.PI / 2; cy(iem, .018, .018, .12, 6, 0xd9a441, .72, .03, .62, { metalness: .7 }).rotation.z = Math.PI / 2;
-
 /* big red button: changes the theme */
 const btn = grp(-2.3, 0, -1.05, { kind: 'btn', tip: '<b>Big red button</b><br>Changes the theme' }); cy(btn, .5, .55, .1, 14, 0x1c1d24, 0, .05, 0);
 const cap = cy(btn, .38, .4, .16, 14, M(0xe3101e, { emissive: 0x7a0008, emissiveIntensity: .8 }), 0, .18, 0); let capT = 0;
 
-/* toy car: drag it around the desk */
+/* toy car: compact teal wedge, drag it around the desk */
 const car = grp(1.9, 0, 1.55, { kind: 'car', tip: '<b>Toy car</b><br>Drag me around' }), carT = new THREE.Vector3(1.9, 0, 1.55), wheels = [];
-bx(car, .5, .14, .26, 0xff7a1a, 0, .13, 0, { roughness: .4 }); bx(car, .26, .12, .22, 0x9fd8ff, -.04, .26, 0, { roughness: .2 }); bx(car, .08, .04, .3, 0x1c1d24, -.22, .24, 0);
-bx(car, .02, .04, .06, M(0xfff3c4, { emissive: 0xfff3c4, emissiveIntensity: 1.5 }), .26, .14, .08); bx(car, .02, .04, .06, M(0xfff3c4, { emissive: 0xfff3c4, emissiveIntensity: 1.5 }), .26, .14, -.08);
-for (const [x, z] of [[.16, .15], [.16, -.15], [-.16, .15], [-.16, -.15]]) { const w = new THREE.Group(); w.position.set(x, .07, z); car.add(w); cy(w, .07, .07, .05, 8, 0x15161a, 0, 0, 0).rotation.x = Math.PI / 2; wheels.push(w); }
+const paint = M(0x14c8b4, { metalness: .55, roughness: .25 }), glass = M(0x0e1a26, { metalness: .6, roughness: .1 }), blk = M(0x15161a, { roughness: .5 });
+bx(car, .42, .045, .2, paint, 0, .0575, 0); bx(car, .2, .002, .03, 0xffffff, .08, .0815, 0); bx(car, .04, .008, .2, blk, .215, .04, 0);
+add(new THREE.CylinderGeometry(.06, .115, .05, 4), glass, -.04, .105, 0, car).rotation.y = Math.PI / 4; car.children.at(-1).scale.set(1.5, 1, 1); bx(car, .12, .006, .075, paint, -.04, .133, 0);
+bx(car, .025, .006, .19, blk, -.19, .115, 0); bx(car, .008, .03, .008, blk, -.19, .098, .07); bx(car, .008, .03, .008, blk, -.19, .098, -.07);
+const lt = M(0xfff3c4, { emissive: 0xfff3c4, emissiveIntensity: 1.5 }), tl = M(0xff2a38, { emissive: 0xff2a38, emissiveIntensity: 1.5 });
+bx(car, .008, .014, .05, lt, .211, .07, .065); bx(car, .008, .014, .05, lt, .211, .07, -.065); bx(car, .008, .014, .17, tl, -.211, .07, 0);
+for (const [x, z] of [[.13, .105], [.13, -.105], [-.13, .105], [-.13, -.105]]) { const w = new THREE.Group(); w.position.set(x, .045, z); car.add(w); cy(w, .045, .045, .03, 10, blk, 0, 0, 0).rotation.x = Math.PI / 2; cy(w, .026, .026, .034, 6, M(0xc9ced8, { metalness: .8, roughness: .3 }), 0, 0, 0).rotation.x = Math.PI / 2; wheels.push(w); }
 
 /* low-poly hands (palm, four fingers, thumb, sleeve) */
 function mkHand(s) {
@@ -159,11 +156,13 @@ function paintScr() {
 }
 
 /* themes: the big red button cycles them (room, desk, lamp light and sticky notes) */
-let hue = 210;
+const LV = [1, .4, 0]; let lv = 0, hue = 210;
+function lights() { const v = LV[lv]; lampSpot.intensity = 26 * v; lampGlow.intensity = 3 * v; bulbM.emissiveIntensity = .6 * v; hemi.intensity = .5 * (.2 + .8 * v); key.intensity = .5 * (.2 + .8 * v); moon.intensity = .8 * (.35 + .65 * v); notes.forEach(m => m.material.emissive.copy(m.material.color).multiplyScalar(.28 * v)); }
+const dimLights = () => { lv = (lv + 1) % 3; lights(); };
 function tint() {
   const [h, n] = THEMES[S.theme]; hue = h; R.style.setProperty('--h', h); const c = (o, s, l) => new THREE.Color().setHSL(((h + o) % 360 + 360) % 360 / 360, s, l, THREE.SRGBColorSpace);
   scene.background = c(0, .45, .06); scene.fog.color.copy(scene.background); wallMat.color.copy(c(10, .4, .3)); hemi.color.copy(c(0, .7, .6)); hemi.groundColor.copy(c(40, .5, .2)); moon.color.copy(c(20, .8, .7)); deskMat.color.copy(c(30, .45, .27));
-  lampSpot.color.set(n); lampGlow.color.set(n); notes.forEach((m, i) => { m.material.color.set(n).offsetHSL(0, 0, (i % 3 - 1) * .04); m.material.emissive.copy(m.material.color).multiplyScalar(.28); }); paintBook();
+  lampSpot.color.set(n); lampGlow.color.set(n); notes.forEach((m, i) => { m.material.color.set(n).offsetHSL(0, 0, (i % 3 - 1) * .04); m.material.emissive.copy(m.material.color).multiplyScalar(.28 * LV[lv]); }); paintBook();
 }
 const press = () => { capT = performance.now() + 220; S.theme = (S.theme + 1) % THEMES.length; ls.s('dinc-theme', S.theme); tint(); };
 
@@ -194,7 +193,7 @@ const hit = e => { mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / inner
 cvEl.addEventListener('pointerdown', e => { down = [e.clientX, e.clientY]; const o = hit(e); if (o && o.userData.kind === 'car') { drag = true; ctl.enabled = false; } });
 cvEl.addEventListener('pointerup', e => {
   if (drag) { drag = false; ctl.enabled = S.view !== 'screen'; return; } if (!down || Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) return;
-  const o = hit(e); if (!o) return; const k = o.userData.kind; if (k === 'book') pick(o.userData.r); else if (k === 'note') typeSite(); else if (k === 'laptop') openLid(); else if (k === 'btn') press();
+  const o = hit(e); if (!o) return; const k = o.userData.kind; if (k === 'book') pick(o.userData.r); else if (k === 'note') typeSite(); else if (k === 'laptop') openLid(); else if (k === 'btn') press(); else if (k === 'lamp') dimLights();
 });
 cvEl.addEventListener('pointermove', e => {
   if (drag) { ray.setFromCamera(mouse.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), cam); if (ray.ray.intersectPlane(plane, pv)) carT.set(Math.max(-4.3, Math.min(4.3, pv.x)), 0, Math.max(-1.4, Math.min(1.75, pv.z))); return; }
@@ -247,7 +246,7 @@ renderer.setAnimationLoop(() => {
   books.forEach(b => { const op = b === openB, u = b.userData; b.position.lerp(op ? OPEN : u.home, .12); b.rotation.y += ((op ? 0 : u.hr) - b.rotation.y) * .12; u.cp.rotation.z += ((op ? -3.1 : 0) - u.cp.rotation.z) * .12; u.lb.visible = u.cp.rotation.z < -.4; if (op) inside.visible = u.cp.rotation.z < -2.6; });
   if (!openB) inside.visible = false;
   prev.copy(car.position); car.position.lerp(carT, .3); const dx = car.position.x - prev.x, dz = car.position.z - prev.z, mv = Math.hypot(dx, dz);
-  if (mv > .004) { let da = Math.atan2(-dz, dx) - car.rotation.y; da = ((da + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI; car.rotation.y += da * .25; wheels.forEach(w => w.rotation.z -= mv / .07); }
+  if (mv > .004) { let da = Math.atan2(-dz, dx) - car.rotation.y; da = ((da + Math.PI) % (Math.PI * 2) + Math.PI * 2) % (Math.PI * 2) - Math.PI; car.rotation.y += da * .25; wheels.forEach(w => w.rotation.z -= mv / .045); }
   if (S.view === 'screen' && !site.hidden) place();
   renderer.render(scene, cam);
 });
